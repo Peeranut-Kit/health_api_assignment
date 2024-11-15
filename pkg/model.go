@@ -32,8 +32,8 @@ type Patient struct {
 
 type Staff struct {
 	ID         int      `gorm:"primaryKey" json:"id"`
-	Username   string   `gorm:"size:255;not null;unique" json:"username"`
-	Password   string   `gorm:"size:255;not null" json:"password"`
+	Username   string   `gorm:"size:255;not null;unique" json:"username" validate:"required"`
+	Password   string   `gorm:"size:255;not null" json:"password" validate:"required"`
 	HospitalID int      `json:"hospital_id"`
 	Hospital   Hospital `gorm:"foreignKey:HospitalID" json:"hospital"`
 }

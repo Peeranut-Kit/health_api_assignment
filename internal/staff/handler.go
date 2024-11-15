@@ -5,6 +5,7 @@ import (
 
 	"github.com/Peeranut-Kit/health_api_assignment/pkg"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 // Primary adapter
@@ -39,6 +40,14 @@ func (h *StaffHandler) CreateStaff(c *gin.Context) {
 	    return
 	}*/
 	if err := c.ShouldBindJSON(&newStaff); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Validate the input body
+	validate := validator.New()
+	err := validate.Struct(newStaff)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
