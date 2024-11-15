@@ -6,7 +6,7 @@ WORKDIR /go/src/app
 # Copy the entire build context (from the root directory) into the container's working directory
 COPY . .
 # Install dependencies and build the Go application
-RUN go install ./...
+RUN go get -d -v ./...
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o /go/bin/app -v .
 
 #final stage
