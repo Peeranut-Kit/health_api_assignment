@@ -35,7 +35,7 @@ func (s *StaffService) CreateStaff(staff *pkg.Staff) (*pkg.Staff, error) {
 
 	// re-assign user password before saving in database
 	staff.Password = string(hashedPassword)
-	
+
 	if err := s.repo.CreateStaff(staff); err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (s *StaffService) SignInStaff(staff *pkg.Staff) (string, error) {
 	}
 
 	// Create JWT token for the authenticated staff
-	token, err := createToken(staff)
+	token, err := createToken(selectedStaffByEmail)
 	if err != nil {
 		return "", errors.New("error creating token")
 	}
@@ -66,16 +66,16 @@ func (s *StaffService) SignInStaff(staff *pkg.Staff) (string, error) {
 }
 
 func createToken(staff *pkg.Staff) (string, error) {
-	// Create token
-	token := jwt.New(jwt.SigningMethodHS256)
-
-	// Claims
-	claims := token.Claims.(jwt.MapClaims)
+	// Create the Claims
+	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["staff_id"] = staff.ID
 	claims["staff_name"] = staff.Username
 	claims["staff_hospital_id"] = staff.HospitalID
 	claims["exp"] = time.Now().Add(time.Hour * 1).Unix() // Token expiration 1 hour from now
+
+	// Create token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Generate encoded token and send it in response. (t is token)
 	jwtSecret := os.Getenv("JWT_SECRET")
