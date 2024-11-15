@@ -7,7 +7,7 @@ WORKDIR /go/src/app
 COPY . .
 # Install dependencies and build the Go application
 RUN go get -d -v ./...
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o /go/bin/app -v ./...
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o /go/bin/app -v .
 
 #final stage
 FROM alpine:latest
