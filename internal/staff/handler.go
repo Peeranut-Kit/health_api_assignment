@@ -22,6 +22,16 @@ func NewHttpStaffHandler(service StaffServiceInterface) *StaffHandler {
 	return &StaffHandler{service: service}
 }
 
+// CreateStaff godoc
+// @Summary Create a new staff member
+// @Description Create a new hospital staff member with login credentials
+// @Tags Staff
+// @Accept json
+// @Produce json
+// @Param staff body pkg.Staff true "Staff details"
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Router /staff/create [post]
 func (h *StaffHandler) CreateStaff(c *gin.Context) {
 	var newStaff pkg.Staff
 	/*if err := c.BindJSON(&newStaff); err != nil {
@@ -49,6 +59,17 @@ func (h *StaffHandler) CreateStaff(c *gin.Context) {
 	})
 }
 
+// SignInStaff godoc
+// @Summary Staff login
+// @Description Authenticates a staff member and returns a JWT token
+// @Tags Staff
+// @Accept json
+// @Produce json
+// @Param credentials body pkg.Staff true "Staff login credentials"
+// @Success 200 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /staff/login [post]
 func (h *StaffHandler) SignInStaff(c *gin.Context) {
 	var staffInput pkg.Staff
 	if err := c.ShouldBindJSON(&staffInput); err != nil {

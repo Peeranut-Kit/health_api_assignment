@@ -9,15 +9,29 @@ import (
 	"syscall"
 	"time"
 
+	_ "github.com/Peeranut-Kit/health_api_assignment/docs" // Import Swagger docs
 	"github.com/Peeranut-Kit/health_api_assignment/internal/patient"
 	"github.com/Peeranut-Kit/health_api_assignment/internal/staff"
 	"github.com/Peeranut-Kit/health_api_assignment/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
+
+// @title Hospital Middleware API
+// @version 1.0
+// @description This is a hospital middleware API.
+// @termsOfService http://example.com/terms/
+
+// @contact.name API Support
+// @contact.email peeranut.kit.work@gmail.com
+
+// @host localhost:8080
+// @BasePath /
 
 // docker compose up -d --scale api-service=3 --build
 func main() {
@@ -50,7 +64,10 @@ func main() {
 	patientHandler := patient.NewHttpPatientHandler(patientService)
 	staffHandler := staff.NewHttpStaffHandler(staffService)
 
- 	// test nginx reverse proxy endpoint
+	// Swagger endpoint
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// test nginx reverse proxy endpoint
 	r.GET("/ping", func(c *gin.Context) {
 		hostname, _ := os.Hostname()
 		log.Println(hostname)

@@ -1,0 +1,177 @@
+basePath: /
+definitions:
+  pkg.Hospital:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      patients:
+        items:
+          $ref: '#/definitions/pkg.Patient'
+        type: array
+      staffs:
+        items:
+          $ref: '#/definitions/pkg.Staff'
+        type: array
+    type: object
+  pkg.Patient:
+    properties:
+      date_of_birth:
+        type: string
+      email:
+        type: string
+      first_name_en:
+        type: string
+      first_name_th:
+        type: string
+      gender:
+        type: string
+      hospital:
+        $ref: '#/definitions/pkg.Hospital'
+      hospital_id:
+        type: integer
+      id:
+        type: integer
+      last_name_en:
+        type: string
+      last_name_th:
+        type: string
+      middle_name_en:
+        type: string
+      middle_name_th:
+        type: string
+      national_id:
+        type: string
+      passport_id:
+        type: string
+      patient_hn:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  pkg.Staff:
+    properties:
+      hospital:
+        $ref: '#/definitions/pkg.Hospital'
+      hospital_id:
+        type: integer
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: peeranut.kit.work@gmail.com
+    name: API Support
+  description: This is a hospital middleware API.
+  termsOfService: http://example.com/terms/
+  title: Hospital Middleware API
+  version: "1.0"
+paths:
+  /patient/search:
+    get:
+      consumes:
+      - application/json
+      description: Search for a patient which belongs to the same hospital as the
+        staff member in the system
+      parameters:
+      - description: Patient search criteria
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/pkg.Patient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Search for a patient
+      tags:
+      - Patient
+  /staff/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new hospital staff member with login credentials
+      parameters:
+      - description: Staff details
+        in: body
+        name: staff
+        required: true
+        schema:
+          $ref: '#/definitions/pkg.Staff'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new staff member
+      tags:
+      - Staff
+  /staff/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a staff member and returns a JWT token
+      parameters:
+      - description: Staff login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/pkg.Staff'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Staff login
+      tags:
+      - Staff
+swagger: "2.0"

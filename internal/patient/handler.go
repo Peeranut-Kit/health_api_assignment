@@ -25,6 +25,17 @@ func NewHttpPatientHandler(service PatientServiceInterface) *PatientHandler {
 /* This API should mocking searching system of Hospital Information Systems (HIS) of Hospital A API:
 Route: GET https://hospital-a.api.co.th/patient/search/{id} */
 
+// SearchPatient godoc
+// @Summary Search for a patient
+// @Description Search for a patient which belongs to the same hospital as the staff member in the system
+// @Tags Patient
+// @Accept json
+// @Produce json
+// @Param request body pkg.Patient true "Patient search criteria"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /patient/search [get]
 func (h *PatientHandler) SearchPatient(c *gin.Context) {
 	var patientSearchRequest pkg.Patient
 	if err := c.ShouldBindJSON(&patientSearchRequest); err != nil {
