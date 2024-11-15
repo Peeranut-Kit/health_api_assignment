@@ -14,7 +14,7 @@ import (
 	"github.com/Peeranut-Kit/health_api_assignment/internal/staff"
 	"github.com/Peeranut-Kit/health_api_assignment/middleware"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
@@ -37,11 +37,11 @@ import (
 func main() {
 	defer gracefulShutdown()
 
-	// Load environment variables
+	/*// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
-		log.Printf("Warning: Could not load .env file: %v", err)
-	}
+		log.Fatalf("Warning: Could not load .env file: %v", err)
+	}*/
 
 	// Initialize database
 	db, err := initDatabase()
@@ -49,7 +49,7 @@ func main() {
 		panic(fmt.Sprintf("Failed to connect to the database: %v", err))
 	}
 
-	fmt.Println("Database connected successfully")
+	log.Println("Database connected successfully")
 
 	// Gin Framework
 	r := gin.Default()
@@ -130,5 +130,5 @@ func gracefulShutdown() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
 	<-quit
-	fmt.Println("Shutting down server...")
+	log.Println("Shutting down server...")
 }
