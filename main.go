@@ -9,8 +9,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Peeranut-Kit/health_api_assignment/internal/staff"
 	"github.com/Peeranut-Kit/health_api_assignment/internal/patient"
+	"github.com/Peeranut-Kit/health_api_assignment/internal/staff"
+	"github.com/Peeranut-Kit/health_api_assignment/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -65,7 +66,7 @@ func main() {
 	r.POST("/staff/login", staffHandler.SignInStaff)
 
 	// API to search for a patient
-	r.GET("/patient/search", patientHandler.SearchPatient)
+	r.GET("/patient/search", middleware.AuthRequiredMiddleware, patientHandler.SearchPatient)
 
 	r.Run(":" + os.Getenv("PORT")) // listen and serve on port 8080
 }
