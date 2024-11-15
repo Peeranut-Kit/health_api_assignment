@@ -40,7 +40,7 @@ func main() {
 	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
-		panic("Error loading .env file")
+		log.Printf("Warning: Could not load .env file: %v", err)
 	}
 
 	// Initialize database
@@ -66,6 +66,14 @@ func main() {
 
 	// Swagger endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// Health check endpoint
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "healthy",
+			"message": "Service is running",
+		})
+	})
 
 	// test nginx reverse proxy endpoint
 	r.GET("/ping", func(c *gin.Context) {
