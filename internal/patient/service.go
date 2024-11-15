@@ -6,7 +6,7 @@ import (
 
 // Primary port
 type PatientServiceInterface interface {
-	SearchPatient() (*pkg.Patient, error)
+	SearchPatient(patientSearchRequest *pkg.Patient) ([]pkg.Patient, error)
 }
 
 type PatientService struct {
@@ -17,6 +17,13 @@ func NewPatientService(repo PatientRepositoryInterface) PatientServiceInterface 
 	return &PatientService{repo: repo}
 }
 
-func (s *PatientService) SearchPatient() (*pkg.Patient, error) {
-	//
+func (s *PatientService) SearchPatient(patientSearchRequest *pkg.Patient) ([]pkg.Patient, error) {
+	// Retrieve patient list searching
+	patientList, err := s.repo.SearchPatient(patientSearchRequest)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return patientList, nil
 }
