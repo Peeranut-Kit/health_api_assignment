@@ -42,17 +42,20 @@ func AuthRequiredMiddleware(c *gin.Context) {
 		return
 	}
 
-	// Convert hospital_id to int if necessary
-	hospitalIDStr := claim["staff_hospital_id"].(string) // assume it's a string in the token
-	hospitalID, err := strconv.Atoi(hospitalIDStr)
-	if err != nil {
+	// Convert hospital_id to string
+	var hospitalIDStr string
+	if id, ok := claim["staff_hospital_id"].(string); ok {
+		hospitalIDStr = id
+	} else if idFloat, ok := claim["staff_hospital_id"].(float64); ok {
+		hospitalIDStr = strconv.FormatFloat(idFloat, 'f', 0, 64) // Convert float64 to string
+	} else {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid hospital_id format"})
 		c.Abort()
 		return
 	}
 
 	// Set hospital_id in gin.Context
-	c.Set("hospital_id", hospitalID)
+	c.Set("hospital_id", hospitalIDStr)
 
 	// Proceed to the next handler
 	c.Next()
