@@ -20,12 +20,18 @@ type GormStaffRepository struct {
 func NewGormStaffRepository(db *gorm.DB) StaffRepositoryInterface {
 	return &GormStaffRepository{db: db}
 }
-  
+
 func (r *GormStaffRepository) CreateStaff(staff *pkg.Staff) error {
 	// Create to staff database
 	if result := r.db.Create(&staff); result.Error != nil {
-	  return result.Error
+		return result.Error
 	}
+
+	/*// Preload the associated hospital
+	if err := r.db.Preload("Hospital").First(&staff, staff.ID).Error; err != nil {
+		return err
+	}*/
+
 	return nil
 }
 
