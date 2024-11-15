@@ -59,13 +59,13 @@ func getHospitalID(c *gin.Context) (int, error) {
 	// Retrieve hospital_id from gin.Context
 	hospitalID, exists := c.Get("hospital_id")
 	if !exists {
-		return -1, errors.New("Hospital ID not found")
+		return -1, errors.New("hospital ID not found")
 	}
 
 	// Type assert to int if necessary
 	hospitalIDInt, ok := hospitalID.(int)
 	if !ok {
-		return -1, errors.New("Invalid hospital ID format")
+		return -1, errors.New("invalid hospital ID format")
 	}
 
 	// Got hospital ID
