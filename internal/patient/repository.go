@@ -25,7 +25,7 @@ func (r *GormPatientRepository) SearchPatient(request *pkg.Patient) ([]pkg.Patie
 
 	query := r.db.Table("patients").Where("hospital_id = ?", request.HospitalID)
 
-	// Add optional conditions only if fields are populated
+    // Add optional conditions only if fields are populated
     if request.ID != 0 {
         query = query.Where("id = ?", request.ID)
     }
@@ -70,9 +70,9 @@ func (r *GormPatientRepository) SearchPatient(request *pkg.Patient) ([]pkg.Patie
     }
 
 	// Execute the query
-    if err := query.Find(&patientList).Error; err != nil {
-        return nil, err
-    }
-
-    return patientList, nil
+	if err := query.Find(&patientList).Error; err != nil {
+		return nil, err
+	}
+    
+	return patientList, nil
 }

@@ -3,6 +3,7 @@ package patient
 import (
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/Peeranut-Kit/health_api_assignment/pkg"
 	"github.com/gin-gonic/gin"
@@ -47,6 +48,7 @@ func (h *PatientHandler) SearchPatient(c *gin.Context) {
 	hospitalIDInt, err := getHospitalID(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	// Set search criteria to be the same hospital as current staff
@@ -55,13 +57,19 @@ func (h *PatientHandler) SearchPatient(c *gin.Context) {
 	// Call service
 	patientList, err := h.service.SearchPatient(&patientSearchRequest)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	} else if len(patientList) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "No patient found.",
+			"data":    patientList,
+		})
 		return
 	}
 
 	// Success searching
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Patient found successfully.",
+		"message": "Search successfully.",
 		"data":    patientList,
 	})
 }
@@ -74,9 +82,14 @@ func getHospitalID(c *gin.Context) (int, error) {
 	}
 
 	// Type assert to int if necessary
-	hospitalIDInt, ok := hospitalID.(int)
+	hospitalIDStr, ok := hospitalID.(string)
 	if !ok {
-		return -1, errors.New("invalid hospital ID format")
+		return -1, errors.New("assertion failed for string")
+	}
+
+	hospitalIDInt, err := strconv.Atoi(hospitalIDStr)
+	if err != nil {
+		return -1, errors.New("error converting string to int")
 	}
 
 	// Got hospital ID
