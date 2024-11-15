@@ -86,6 +86,14 @@ func (h *StaffHandler) SignInStaff(c *gin.Context) {
 		return
 	}
 
+	// Validate the input body
+	validate := validator.New()
+	err := validate.Struct(staffInput)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// Call service
 	token, err := h.service.SignInStaff(&staffInput)
 
