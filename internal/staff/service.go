@@ -13,6 +13,21 @@ import (
 
 var ErrUnauthorized = errors.New("unauthorization. Username or password is wrong")
 
+// Additional interface to mock for testing
+// PasswordHasher is an interface that wraps bcrypt.CompareHashAndPassword.
+type PasswordHasher interface {
+	CompareHashAndPassword(hashedPassword []byte, password []byte) error
+}
+
+// BcryptHasher is a concrete implementation of PasswordHasher that uses bcrypt.
+type BcryptHasher struct{}
+
+func (b *BcryptHasher) CompareHashAndPassword(hashedPassword []byte, password []byte) error {
+	return bcrypt.CompareHashAndPassword(hashedPassword, password)
+}
+
+// Start of service original file
+
 // Primary port
 type StaffServiceInterface interface {
 	CreateStaff(staff *pkg.Staff) (*pkg.Staff, error)
@@ -20,11 +35,17 @@ type StaffServiceInterface interface {
 }
 
 type StaffService struct {
-	repo StaffRepositoryInterface
+	Repo            StaffRepositoryInterface
+	PasswordHasher  PasswordHasher
+	CreateTokenFunc func(staff *pkg.Staff) (string, error)
 }
 
 func NewStaffService(repo StaffRepositoryInterface) StaffServiceInterface {
-	return &StaffService{repo: repo}
+	return &StaffService{
+		Repo:            repo,
+		PasswordHasher:  &BcryptHasher{},
+		CreateTokenFunc: createToken,
+	}
 }
 
 func (s *StaffService) CreateStaff(staff *pkg.Staff) (*pkg.Staff, error) {
@@ -37,7 +58,7 @@ func (s *StaffService) CreateStaff(staff *pkg.Staff) (*pkg.Staff, error) {
 	// re-assign user password before saving in database
 	staff.Password = string(hashedPassword)
 
-	if err := s.repo.CreateStaff(staff); err != nil {
+	if err := s.Repo.CreateStaff(staff); err != nil {
 		return nil, err
 	}
 
@@ -46,7 +67,7 @@ func (s *StaffService) CreateStaff(staff *pkg.Staff) (*pkg.Staff, error) {
 
 func (s *StaffService) SignInStaff(staff *pkg.Staff) (string, error) {
 	// Retrieve user by email
-	selectedStaffByEmail, err := s.repo.GetStaffFromUsername(staff.Username)
+	selectedStaffByEmail, err := s.Repo.GetStaffFromUsername(staff.Username)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return "", ErrUnauthorized
@@ -56,12 +77,12 @@ func (s *StaffService) SignInStaff(staff *pkg.Staff) (string, error) {
 	}
 
 	// Compare the provided password with the hash stored in the database
-	if err := bcrypt.CompareHashAndPassword([]byte(selectedStaffByEmail.Password), []byte(staff.Password)); err != nil {
+	if err := s.PasswordHasher.CompareHashAndPassword([]byte(selectedStaffByEmail.Password), []byte(staff.Password)); err != nil {
 		return "", ErrUnauthorized
 	}
 
 	// Create JWT token for the authenticated staff
-	token, err := createToken(selectedStaffByEmail)
+	token, err := s.CreateTokenFunc(selectedStaffByEmail)
 	if err != nil {
 		return "", errors.New("error creating token")
 	}

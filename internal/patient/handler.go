@@ -11,7 +11,8 @@ import (
 
 // Primary adapter
 type PatientHandler struct {
-	service PatientServiceInterface
+	Service         PatientServiceInterface
+	GetHospitalIDFn func(c *gin.Context) (int, error)
 }
 
 // Just define what struct will do
@@ -20,7 +21,10 @@ type PatientHandlerInterface interface {
 }
 
 func NewHttpPatientHandler(service PatientServiceInterface) *PatientHandler {
-	return &PatientHandler{service: service}
+	return &PatientHandler{
+		Service:         service,
+		GetHospitalIDFn: getHospitalID,
+	}
 }
 
 /* This API should mocking searching system of Hospital Information Systems (HIS) of Hospital A API:
@@ -45,7 +49,7 @@ func (h *PatientHandler) SearchPatient(c *gin.Context) {
 	}
 
 	// Retrieve hospital_id
-	hospitalIDInt, err := getHospitalID(c)
+	hospitalIDInt, err := h.GetHospitalIDFn(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -55,11 +59,14 @@ func (h *PatientHandler) SearchPatient(c *gin.Context) {
 	patientSearchRequest.HospitalID = hospitalIDInt
 
 	// Call service
-	patientList, err := h.service.SearchPatient(&patientSearchRequest)
+	patientList, err := h.Service.SearchPatient(&patientSearchRequest)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
-	} else if len(patientList) == 0 {
+	}
+
+	// Success searching but not found
+	if len(patientList) == 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "No patient found.",
 			"data":    patientList,
@@ -67,7 +74,7 @@ func (h *PatientHandler) SearchPatient(c *gin.Context) {
 		return
 	}
 
-	// Success searching
+	// Patience found
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Search successfully.",
 		"data":    patientList,
