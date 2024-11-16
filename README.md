@@ -14,7 +14,6 @@ The Hospital Api System is a backend service designed to integrate with Hospital
 - Database: PostgreSQL
 - Containerization: Docker, Docker Compose
 - Reverse Proxy Server: Nginx
-- Project Structure
 
 ## Setup Instructions
 ### Prerequisites
@@ -36,9 +35,7 @@ The Hospital Api System is a backend service designed to integrate with Hospital
    ```
 
 4. Access the APIs via:
-   ```
    Base URL (NGINX): http://localhost:3000
-   ```
 
 ## Unit Testing
 Run unit tests using:
