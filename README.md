@@ -18,15 +18,16 @@ The Hospital Api System is a backend service designed to integrate with Hospital
 ## Setup Instructions
 ### Prerequisites
 - Docker and Docker Compose
-- PostgreSQL
+
 ### Steps
 1. Clone the repository.
    ```
    git clone https://github.com/Peeranut-Kit/health_api_assignment.git
+   
    cd health_api_assignment
    ```
 
-2. Use a .env file provided in the repository. Please ensure that the config in .env file is not the same as any service running on your system (port number, database name).
+2. Use a .env file provided in the repository. Please ensure that all variable in .env file is not the same as any service running on your system (port number, database name).
    Also ensure that all port and container name in docker-compose.yml file do not conflict with any on your local machine.
 
 3. Build and run the application. You can specify the numbers of server running in the network for scaling by changing --scale api-service parameter. (3 servers are specified in this case.)
@@ -40,7 +41,13 @@ The Hospital Api System is a backend service designed to integrate with Hospital
 ## Unit Testing
 Run unit tests using:
 ```
-go test ./tests/...  
+cd test
+
+go test ./...  
+```
+or for verbose output
+```
+go test ./... -v
 ```
 
 ## API Specification
