@@ -51,21 +51,23 @@ go test ./... -v
 ```
 
 ## API Specification
-1. Create a New Staff Member
+- Create a New Staff Member
 Endpoint: POST /staff/create
 
-2. Staff Login
+- Staff Login
 Endpoint: POST /staff/login
 
-3. Search for a Patient
+- Search for a Patient
 Endpoint: GET /patient/search
 *Requires Login
 
 ### Additional endpoints:
 - Swagger UI
 Endpoint: POST /swagger/index.html
+
 - NGINX health check
 Endpoint: /health
+
 - test reverse proxy retreiving hostname of server
 Endpoint: /ping
 
