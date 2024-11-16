@@ -251,6 +251,10 @@ const docTemplate = `{
         },
         "pkg.Staff": {
             "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
             "properties": {
                 "hospital": {
                     "$ref": "#/definitions/pkg.Hospital"
