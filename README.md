@@ -26,16 +26,20 @@ The Hospital Api System is a backend service designed to integrate with Hospital
    
    cd health_api_assignment
    ```
+2. Add a missing dependency and clean up project.
+   ```
+   go mod tidy
+   ```
 
-2. Use a .env file provided in the repository. Please ensure that all variable in .env file is not the same as any service running on your system (port number, database name).<br>
+3. Use a .env file provided in the repository. Please ensure that all variable in .env file is not the same as any service running on your system (port number, database name).<br>
    Also ensure that all port and container name in docker-compose.yml file do not conflict with any on your local machine.
 
-3. Build and run the application. You can specify the numbers of server running in the network for scaling by changing --scale api-service parameter. (3 servers are specified in this case.)
+4. Build and run the application. You can specify the numbers of server running in the network for scaling by changing --scale api-service parameter. (3 servers are specified in this case.)
    ```
    docker compose up -d --scale api-service=3 --build
    ```
 
-4. Access the APIs via:
+5. Access the APIs via:
    Base URL (NGINX): http://localhost:3000
 
 ## Unit Testing
