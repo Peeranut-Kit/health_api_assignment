@@ -27,7 +27,7 @@ The Hospital Api System is a backend service designed to integrate with Hospital
    cd health_api_assignment
    ```
 
-2. Use a .env file provided in the repository. Please ensure that all variable in .env file is not the same as any service running on your system (port number, database name).
+2. Use a .env file provided in the repository. Please ensure that all variable in .env file is not the same as any service running on your system (port number, database name).<br>
    Also ensure that all port and container name in docker-compose.yml file do not conflict with any on your local machine.
 
 3. Build and run the application. You can specify the numbers of server running in the network for scaling by changing --scale api-service parameter. (3 servers are specified in this case.)
@@ -51,24 +51,24 @@ go test ./... -v
 ```
 
 ## API Specification
-- Create a New Staff Member
+- Create a New Staff Member<br>
 Endpoint: POST /staff/create
 
-- Staff Login
+- Staff Login<br>
 Endpoint: POST /staff/login
 
-- Search for a Patient
-Endpoint: GET /patient/search
+- Search for a Patient<br>
+Endpoint: GET /patient/search<br>
 *Requires Login
 
 ### Additional endpoints:
-- Swagger UI
+- Swagger UI<br>
 Endpoint: POST /swagger/index.html
 
-- NGINX health check
+- NGINX health check<br>
 Endpoint: /health
 
-- test reverse proxy retreiving hostname of server
+- test reverse proxy retreiving hostname of server<br>
 Endpoint: /ping
 
 ## Deliverables
