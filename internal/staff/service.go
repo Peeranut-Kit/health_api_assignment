@@ -8,6 +8,7 @@ import (
 	"github.com/Peeranut-Kit/health_api_assignment/pkg"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 var ErrUnauthorized = errors.New("unauthorization. Username or password is wrong")
@@ -47,7 +48,11 @@ func (s *StaffService) SignInStaff(staff *pkg.Staff) (string, error) {
 	// Retrieve user by email
 	selectedStaffByEmail, err := s.repo.GetStaffFromUsername(staff.Username)
 	if err != nil {
-		return "", ErrUnauthorized
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return "", ErrUnauthorized
+		} else {
+			return "", err
+		}
 	}
 
 	// Compare the provided password with the hash stored in the database
