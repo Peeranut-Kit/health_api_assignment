@@ -33,7 +33,6 @@ import (
 // @host localhost:8080
 // @BasePath /
 
-// docker compose up -d --scale api-service=3 --build
 func main() {
 	defer gracefulShutdown()
 
