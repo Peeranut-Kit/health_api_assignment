@@ -1,5 +1,5 @@
-# Hospital Api Assignment
-The Hospital Api System is a backend service designed to integrate with Hospital Middleware system to search and display patient information from Hospital Information Systems (HIS) and facilitate patient information searches. It provides a secure API for staff members to search for patient details, restricted to their associated hospital, and supports user authentication and management.
+# Hospital API Assignment
+The Hospital API System is a backend service designed to integrate with Hospital Middleware system to search and display patient information from Hospital Information Systems (HIS) and facilitate patient information searches. It provides a secure API for staff members to search for patient details, restricted to their associated hospital, and supports user authentication and management.
 
 ## Features
 - Search and display patient information using APIs provided by hospitals.
