@@ -67,13 +67,13 @@ Endpoint: GET /patient/search<br>
 
 ### Additional endpoints:
 - Swagger UI<br>
-Endpoint: POST /swagger/index.html
+Endpoint: GET /swagger/index.html
 
 - NGINX health check<br>
-Endpoint: /health
+Endpoint: GET /health
 
 - test reverse proxy retreiving hostname of server<br>
-Endpoint: /ping
+Endpoint: GET /ping
 
 ## Deliverables
 Development planning documentation including other information such as project structure, API specifications, database schemas and ER diagram at https://docs.google.com/document/d/1sukcTe2uzBExHBINN1sBNdF5ntMXqG3L5DnGt_jMXxM/edit?usp=sharing
