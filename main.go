@@ -14,7 +14,6 @@ import (
 	"github.com/Peeranut-Kit/health_api_assignment/internal/staff"
 	"github.com/Peeranut-Kit/health_api_assignment/middleware"
 	"github.com/gin-gonic/gin"
-	// "github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
@@ -35,12 +34,6 @@ import (
 
 func main() {
 	defer gracefulShutdown()
-
-	/*// Load environment variables
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Warning: Could not load .env file: %v", err)
-	}*/
 
 	// Initialize database
 	db, err := initDatabase()
