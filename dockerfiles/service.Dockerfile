@@ -14,6 +14,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates postgresql-client
 # Copy the built binary from the builder stage to the final container
 COPY --from=builder /go/bin/app /app
+COPY --from=builder /go/src/app/.env ./.env
 # Set the entrypoint to run the application
 # will be ignored and overridden by the entrypoint specified in docker-compose.yml
 # ENTRYPOINT ["/app"]
