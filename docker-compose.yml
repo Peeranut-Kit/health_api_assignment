@@ -18,6 +18,11 @@ services:
       - "5432:5432"
     networks:
       - healthcare_network
+    healthcheck:
+      test: ["CMD", "pg_isready --username=${POSTGRES_USER} --dbname=${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Go API Service
   api-service:
@@ -35,6 +40,13 @@ services:
       - postgres
     networks:
       - healthcare_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "postgres", "-p", "${DB_PORT}", "-U", "${POSTGRES_USER}"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+      start_period: 30s
+    entrypoint: ["sh", "-c", "until pg_isready -h postgres -p 5432 -U ${POSTGRES_USER}; do sleep 2; done; /app"]  # Wait for DB before starting app
 
   # Nginx Service for Reverse Proxy
   nginx:
