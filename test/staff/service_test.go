@@ -85,7 +85,7 @@ func TestStaffService_CreateStaff(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Empty(t, emptyStaff)
-		
+
 		// Verify expectations
 		mockRepo.AssertExpectations(t)
 	})
@@ -146,7 +146,7 @@ func TestStaffService_SignInStaff(t *testing.T) {
 		assert.Error(t, err)
 		assert.Empty(t, token) // token is empty string
 		assert.EqualError(t, err, staff.ErrUnauthorized.Error())
-		
+
 		// Verify expectations
 		mockRepo.AssertExpectations(t)
 	})
@@ -192,14 +192,14 @@ func TestStaffService_SignInStaff(t *testing.T) {
 			Password: "wrong_hash_password_is_eataikugvkarugvtoy",
 		}, nil)
 		// Mock bcrypt CompareHashAndPassword to return error (failed password match)
-		mockHasher.On("CompareHashAndPassword", mock.AnythingOfType("[]uint8"), mock.AnythingOfType("[]uint8")).Return(errors.New("password is not matched"))
+		mockHasher.On("CompareHashAndPassword", mock.AnythingOfType("[]uint8"), mock.AnythingOfType("[]uint8")).Return(errors.New("password does not matched"))
 
 		token, err := service.SignInStaff(&inputStaff)
 
 		assert.Error(t, err)
 		assert.Empty(t, token) // token is empty string
 		assert.EqualError(t, err, staff.ErrUnauthorized.Error())
-		
+
 		// Verify expectations
 		mockRepo.AssertExpectations(t)
 		mockHasher.AssertExpectations(t)
